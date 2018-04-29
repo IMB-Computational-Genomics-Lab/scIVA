@@ -1,11 +1,39 @@
-Package: scIVA
+Package: scGPS
 Type: Package
-Title: What the Package Does (Title Case)
+Title: An implementation of clustering and subpopulation relationship analysis (scGPS = single cell Global Predictions of Subpopulation)
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+Authors@R: c(
+    person("Liam", "Crowhurst", email="l.crowhurst@uq.edu.au", role=c("aut", "cre")),
+    person("Quan", "Nguyen",role=c("aut", "create"))
+    )
+Description: scIVA is an interactive R package and web-tool for visualisation and analysis of single cell RNA-Seq data. 
 Encoding: UTF-8
 LazyData: true
+License: GPL-3
+RoxygenNote: 6.0.1
+Depends: R (>= 3.3)
+biocViews: DataImport
+Imports:
+	shiny
+	plotly
+	RColorBrewer
+	sunburstR
+	readxl
+	d3r
+	treemap
+	ggplot2
+	grid
+	randomcoloR
+	DT
+	shinythemes
+	webshot
+	heatmaply
+	ReactomePA
+	org.Hs.eg.db
+	clusterProfiler
+	networkD3
+Suggests:
+	readr
+	data.table
+VignetteBuilder: knitr
+SystemRequirements: GNU make
