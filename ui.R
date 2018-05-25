@@ -21,8 +21,7 @@ ui <- fluidPage(
     #tableClusterDataFull tr.odd {background-color:black}
     #tableClusterDataFull tr.even {background-color:black}"
   ))),
-  # #tableClusterDataPos {}
-  
+
   titlePanel("scIVA: Single Cell Interactive Visualisation and Analysis"),
   tabsetPanel(type = "tabs",
               tabPanel("Upload data",
@@ -34,7 +33,7 @@ ui <- fluidPage(
                                             accept = c("text/csv",
                                                        "text/comma-separated-values,text/plain",
                                                        ".csv")),
-                                  
+
                                   checkboxInput("transposeExpression", "Transpose Expression", FALSE),
                                   checkboxInput("headerExpression", "Header", TRUE),
                                   radioButtons("sepExpression", "Separator",
@@ -56,9 +55,9 @@ ui <- fluidPage(
                                 tableOutput("noCells")
                          )
                        ),
-                       
+
                        tags$hr(),
-                       
+
                        fluidRow(
                          column(3,
                                 wellPanel(
@@ -67,7 +66,7 @@ ui <- fluidPage(
                                             accept = c("text/csv",
                                                        "text/comma-separated-values,text/plain",
                                                        ".csv")),
-                                  
+
                                   checkboxInput("transposeCluster", "Transpose Cluster", FALSE),
                                   checkboxInput("headerCluster", "Header", TRUE),
                                   radioButtons("sepCluster", "Separator",
@@ -93,9 +92,9 @@ ui <- fluidPage(
                                 tableOutput("noUnique")
                          )
                        ),
-                       
+
                        tags$hr(),
-                       
+
                        fluidRow(
                          column(width = 3,
                                 wellPanel(
@@ -115,9 +114,9 @@ ui <- fluidPage(
                                 tableOutput("noList")
                          )
                        ),
-                       
+
                        tags$hr(),
-                       
+
                        fluidRow(
                          column(width = 3,
                                 wellPanel(
@@ -299,7 +298,7 @@ ui <- fluidPage(
                                                                                     )
                                                                                   ),
                                                                                   tags$br(),
-                                                                                  
+
                                                                                   fluidRow(column(12,h4("Kruskal-Wallis Test"))),
                                                                                   fluidRow(
                                                                                     column(width = 4,
