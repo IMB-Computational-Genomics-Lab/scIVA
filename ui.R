@@ -7,14 +7,14 @@ ui <- fluidPage(
          background-color: #ffffff;
          }
          ')
-    ),
+  ),
   tags$style(
     HTML('
          .tbody{
          color: #000000;
          }
          ')
-    ),
+  ),
   tags$tbody(tags$style(HTML(
     "#tableClusterDataPos tr.odd {background-color:black}
     #tableClusterDataPos tr.even {background-color:black}
@@ -24,7 +24,7 @@ ui <- fluidPage(
 
   titlePanel("scIVA: Single Cell Interactive Visualisation and Analysis"),
   tabsetPanel(type = "tabs",
-              tabPanel("Upload data",
+              tabPanel("Upload Data",
                        fluidRow(
                          column(3,
                                 wellPanel(
@@ -471,6 +471,11 @@ ui <- fluidPage(
                                                          )
                                         )
                        )
+              ),
+              tabPanel("About",
+                       column(12,
+                              h4("Upload Data")
+                       )
               )
   )
-    )
+)
