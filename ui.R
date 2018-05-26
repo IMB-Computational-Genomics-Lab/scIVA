@@ -21,9 +21,9 @@ ui <- fluidPage(
     #tableClusterDataFull tr.odd {background-color:black}
     #tableClusterDataFull tr.even {background-color:black}"
   ))),
-  # #tableClusterDataPos {}
-  
+
   titlePanel("scIVA: Single Cell Interactive Visualisation and Analysis"),
+
   tabsetPanel(type = "tabs",
               tabPanel("Upload data",
                        fluidRow(
@@ -34,7 +34,7 @@ ui <- fluidPage(
                                             accept = c("text/csv",
                                                        "text/comma-separated-values,text/plain",
                                                        ".csv")),
-                                  
+
                                   checkboxInput("transposeExpression", "Transpose Expression", FALSE),
                                   checkboxInput("headerExpression", "Header", TRUE),
                                   radioButtons("sepExpression", "Separator",
@@ -56,9 +56,9 @@ ui <- fluidPage(
                                 tableOutput("noCells")
                          )
                        ),
-                       
+
                        tags$hr(),
-                       
+
                        fluidRow(
                          column(3,
                                 wellPanel(
@@ -67,7 +67,7 @@ ui <- fluidPage(
                                             accept = c("text/csv",
                                                        "text/comma-separated-values,text/plain",
                                                        ".csv")),
-                                  
+
                                   checkboxInput("transposeCluster", "Transpose Cluster", FALSE),
                                   checkboxInput("headerCluster", "Header", TRUE),
                                   radioButtons("sepCluster", "Separator",
@@ -93,9 +93,9 @@ ui <- fluidPage(
                                 tableOutput("noUnique")
                          )
                        ),
-                       
+
                        tags$hr(),
-                       
+
                        fluidRow(
                          column(width = 3,
                                 wellPanel(
@@ -115,9 +115,9 @@ ui <- fluidPage(
                                 tableOutput("noList")
                          )
                        ),
-                       
+
                        tags$hr(),
-                       
+
                        fluidRow(
                          column(width = 3,
                                 wellPanel(
@@ -299,7 +299,7 @@ ui <- fluidPage(
                                                                                     )
                                                                                   ),
                                                                                   tags$br(),
-                                                                                  
+
                                                                                   fluidRow(column(12,h4("Kruskal-Wallis Test"))),
                                                                                   fluidRow(
                                                                                     column(width = 4,
@@ -445,7 +445,9 @@ ui <- fluidPage(
                                                          ),
                                                          fluidRow(
                                                            column(12,
-                                                                  forceNetworkOutput("reactome")
+                                                                  forceNetworkOutput("reactome"),
+                                                                  plotOutput("cnet")
+
                                                            )
                                                          ),
                                                          tags$hr(),
@@ -472,6 +474,20 @@ ui <- fluidPage(
                                                          )
                                         )
                        )
+              ),
+              tabPanel("About",
+                       column(12,
+                              h4("Upload Data"),
+                              p("scIVA allows for flexible data uploading, with multiple formats accepted, including csv, tsv, and xlsx, each with or without quotations. It also provides options to transpose the data matrices and choose headers from the uploaded dataset. Following the initial upload, the user can subset data by clusters, or upload a gene list to subset by genes, giving greater control to the user. This then gives a preview of the uploaded data, with cell, gene and cluster counts."),
+                              h4("Quality Control"),
+                              p("scIVA gives access to a range of quality control measures for cells, including an interactive Beeswarm plot to compare between clusters or experimental design conditions. Sequencing depth quality control shows mean expression with proportions of cells expressing the gene. Also included is a ranking system of genes by mean and variance across the whole dataset and across clusters. This option facilitates gene selection based on gene expression pattern. scIVA also allows for data to be normalized using different procedures, and gives users control to filter outlier genes from the dataset. The resulting data can be downloaded and re-uploaded for subsequent analysis."),
+                              h4("Single Gene Visualisation"),
+                              p("A common analysis question is to find how gene expression changes between different clusters. scIVA has comprehensive range of interactive visualisation and statistical tests for examining changes of any selected gene between clusters. The key features of scIVA is to provide the ability to visualize the data in an intuitive and interactive way. The Sunburst plot generates a layered graph of the proportion of cells with/without expression of the genes, displaying counts and percentage representation. The Beeswarm plot graphs the proportion of expressed cells and cell-specific expression level by clusters. Multiple density plots are generated to show the distribution of gene expression between clusters for all and for zero-filtered cells. A Summary expression table is generated, which displays counts, percentages and means for each cluster across all cells and positively expressed cells."),
+                              h4("Single Gene Analysis"),
+                              p("Testing differences in single cell gene expression requires careful consideration of expression distribution, as the majority of the genes express in a small proportion of the cells. scIVA provides summary statistics in data browsing table by cells and clusters. To first identify genes with potential expression changes, a Kruskal-Wallis test is performed for all clusters, followed by a Kolmogorov-Smirnov test for pair-wise statistical differences in the distributions of gene expression between clusters.. Importantly, a modified form of likelihood ratio test, taking into account zero-inflated distribution, is provided to quantitatively perform differential expression analysis at gene level between clusters and to estimate fold change."),
+                              h4("Gene List Analysis"),
+                              p("scIVA provides analysis tools for a user uploaded list of multiple genes. Features include reactome pathway analysis, with p-value cutoff for enrichment tests which displays interactive genetic pathways. The user can also choose to cluster by selected genes, with options to choose the number of clusters, and whether to scale by row, with results displayed as a heatmap with dendrogram to illustrate the arrangements of clustering.")
+                       )
               )
-  )
     )
+)
