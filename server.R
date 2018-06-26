@@ -1,5 +1,5 @@
 
-server <- function(input, output, session){
+shinyServer(function(input, output, session){
 
   ####First Page inputs/outputs####
 
@@ -1015,3 +1015,4 @@ server <- function(input, output, session){
     HTML("<h4>Positive Data, lower threshold at ", it,":<br>", input$name, "</h4>")})
 
 }
+)
