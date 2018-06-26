@@ -1,5 +1,5 @@
 
-ui <- fluidPage(
+shinyUI(fluidPage(
   theme = shinytheme("cyborg"),
   tags$style(
     HTML('
@@ -489,9 +489,7 @@ ui <- fluidPage(
                               p("scIVA provides analysis tools for a user uploaded list of multiple genes. Features include reactome pathway analysis, with p-value cutoff for enrichment tests which displays interactive genetic pathways. The user can also choose to cluster by selected genes, with options to choose the number of clusters, and whether to scale by row, with results displayed as a heatmap with dendrogram to illustrate the arrangements of clustering.")
                        )
               )
-<<<<<<< HEAD
-    )
-=======
   )
->>>>>>> dc62f55ed3facda738cc24bfeb144390541806e8
+)
+
 )
