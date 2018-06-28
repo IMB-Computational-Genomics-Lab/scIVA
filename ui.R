@@ -59,12 +59,8 @@ shinyUI(fluidPage(
                                        tableOutput("noGenes"),
                                        tableOutput("noCells")
                                 )
-<<<<<<< HEAD
                          )
-                       ),
-=======
                          ),
->>>>>>> e0c8ce827767435bacd65cc081ff2fa58fb0b66a
 
                          tags$hr(),
 
@@ -143,61 +139,6 @@ shinyUI(fluidPage(
                                   tableOutput("tableClusterList")
                            )
                          )
-<<<<<<< HEAD
-                       )
-              ),
-              tabPanel("Quality Control",
-                       conditionalPanel(condition = "output.conditionDataEntry != 'TRUE'",
-                                        h4('Please load the Expression and Cluster matrices on the "Upload Data" tab.')),
-                       conditionalPanel(condition = "output.conditionDataEntry == 'TRUE'",
-                                        tabsetPanel(type = "tabs",
-                                                    tabPanel("Mapped Reads",
-                                                             tags$br(),
-                                                             fluidRow(
-                                                               column(12,
-                                                                      wellPanel(
-                                                                        plotlyOutput("QClibSizeExprsGenesFull")
-                                                                      )
-                                                               )
-                                                             )
-                                                    ),
-                                                    tabPanel("Dropout rate",
-                                                             tags$br(),
-                                                             fluidRow(
-                                                               column(12,
-                                                                      wellPanel(
-                                                                        plotlyOutput("DropOutFull")
-                                                                      )
-                                                               )
-                                                             )
-                                                    ),
-                                                    tabPanel("Mean & Variance",
-                                                             tags$br(),
-                                                             conditionalPanel(condition = "output.conditionDataEntry != 'TRUE'",
-                                                                              h4('Please load the Expression and Cluster matrices on the "Upload Data" tab.')),
-                                                             conditionalPanel(condition = "output.conditionDataEntry == 'TRUE'",
-                                                                              uiOutput("tableMeanVarTitle"),
-                                                                              DT::dataTableOutput("tableMeanVar")
-                                                             )
-                                                    ),
-                                                    tabPanel("Normalisation & Outlier Removal",
-                                                             fluidRow(
-                                                               column(12,
-                                                                      h4('Outlier Removal')
-                                                               ),
-                                                               column(6,
-                                                                      wellPanel(
-                                                                        sliderInput("mad_cutoff", "Set Median Absolute Deviation Threshold:",
-                                                                                    min = 0.1, max = 5,
-                                                                                    value = 3)
-                                                                      )
-                                                               ),
-                                                               column(6,
-                                                                      wellPanel(
-                                                                        sliderInput("gene_cutoff", "Set Minimum Percent of Expressing Cells Threshold:",
-                                                                                    min = 0.1, max = 50,
-                                                                                    value = 1)
-=======
                        ),
                        tabPanel("Quality Control",
                                 conditionalPanel(condition = "output.conditionDataEntry != 'TRUE'",
@@ -212,7 +153,6 @@ shinyUI(fluidPage(
                                                                                  plotlyOutput("QClibSizeExprsGenesFull")
                                                                                )
                                                                         )
->>>>>>> e0c8ce827767435bacd65cc081ff2fa58fb0b66a
                                                                       )
                                                              ),
                                                              tabPanel("Dropout rate",
@@ -539,8 +479,5 @@ shinyUI(fluidPage(
                        )
               )
   )
-<<<<<<< HEAD
-))
-=======
->>>>>>> e0c8ce827767435bacd65cc081ff2fa58fb0b66a
+)
 
