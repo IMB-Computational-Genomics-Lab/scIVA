@@ -46,7 +46,8 @@ shinyServer(function(input, output, session){
       dfExpression <- as.data.frame(t(fread(input$expression$datapath,
                                             header = input$headerExpression,
                                             sep = input$sepExpression,
-                                            quote = input$quoteExpression)))
+                                            quote = input$quoteExpression,
+                                            stringsAsFactors=TRUE)))
     } else {
       dfExpression <- fread(input$expression$datapath,
                             header = input$headerExpression,
@@ -569,6 +570,11 @@ shinyServer(function(input, output, session){
     h
   })
 
+  output$tableMeanVar <- DT::renderDataTable({
+
+    DT::datatable(dataGeneExpressionCluster(),options = list(pageLength = 20))
+  })
+
   libSizeExprsGenesFull <- reactive({
     palette <- clusterPalette()
     expression.matrix <- as.data.frame(dataExpression())
@@ -596,7 +602,7 @@ shinyServer(function(input, output, session){
   output$heatmap2 <- renderPlotly({
     DE <- dataExpressionGeneList()
     #totalReadsPerGenes <- rowSums(DE)
-    DE <-log2(DE+1)
+    DE <- log2(DE+1)
     k_row_input <-input$heatmap2Input
     if (input$Scaling == 'N') {
       p <- heatmaply(DE, k_row = k_row_input, labCol = NA, Colv = NULL) #, scale="row"
@@ -987,6 +993,8 @@ shinyServer(function(input, output, session){
   #uiOutput("")
   ####
 
+  output$tableMeanVarTitle <- renderUI({HTML("<h4>Summary Table of Uploaded Expression Matrix</h4>")})
+
   output$expressionTitle <- renderUI({req(input$expression)
     HTML("<h4>Uploaded Expression Matrix</h4>")})
 
@@ -1008,11 +1016,11 @@ shinyServer(function(input, output, session){
 
   output$summaryTitle <- renderUI({HTML("<h4>Summary Table: ", input$name, "</h4>")})
 
-  output$fullDataTitle <- renderUI({HTML("<h4>Full Data:<br>", input$name, "</h4>")})
+  output$fullDataTitle <- renderUI({HTML("<h5>Full Data:<br>", input$name, "</h4>")})
 
   output$posDataTitle <- renderUI({
     it <- thresholdCheck(input$threshold)
-    HTML("<h4>Positive Data, lower threshold at ", it,":<br>", input$name, "</h4>")})
+    HTML("<h5>Positive Data, lower threshold at ", it,":<br>", input$name, "</h4>")})
 
 }
 )
