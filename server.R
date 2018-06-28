@@ -46,15 +46,13 @@ shinyServer(function(input, output, session){
       dfExpression <- as.data.frame(t(fread(input$expression$datapath,
                                             header = input$headerExpression,
                                             sep = input$sepExpression,
-                                            quote = input$quoteExpression,
-                                            stringsAsFactors=TRUE)))
+                                            quote = input$quoteExpression)))
     } else {
-      dfExpression <- fread(input$expression$datapath,
-                            header = input$headerExpression,
-                            sep = input$sepExpression,
-                            quote = input$quoteExpression,
-                            data.table = FALSE,
-                            stringsAsFactors=TRUE)
+      dfExpression <- as.data.frame(fread(input$expression$datapath,
+                                          header = input$headerExpression,
+                                          sep = input$sepExpression,
+                                          quote = input$quoteExpression,
+                                          data.table = TRUE))
     }
 
 
@@ -641,7 +639,7 @@ shinyServer(function(input, output, session){
                         fontSize = 18, charge = -20, bounded = TRUE) #,linkColour = "FF530D"
     return(iD3)
     #return(list("iD3"=iD3))# "p_cnet" = p_cnet))
-    })
+  })
 
 
   output$cnet <- renderPlot({
