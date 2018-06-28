@@ -53,7 +53,8 @@ shinyServer(function(input, output, session){
                             header = input$headerExpression,
                             sep = input$sepExpression,
                             quote = input$quoteExpression,
-                            data.table = FALSE)
+                            data.table = FALSE,
+                            stringsAsFactors=TRUE)
     }
 
 
