@@ -36,7 +36,11 @@ shinyUI(fluidPage(
                                                        ".csv")),
 
                                   checkboxInput("transposeExpression", "Transpose Expression", FALSE),
-                                  checkboxInput("headerExpression", "Header", TRUE),
+                                  radioButtons("headerExpression", "Header",
+                                               choices = c("Auto", "auto",
+                                                           "True", TRUE,
+                                                           "False", FALSE),
+                                               selected = "auto"),
                                   radioButtons("sepExpression", "Separator",
                                                choices = c("Comma" = ",",
                                                            "Semicolon" = ";",
@@ -47,13 +51,14 @@ shinyUI(fluidPage(
                                                            "Double Quote" = '"',
                                                            "Single Quote" = "'"),
                                                selected = '"')
+
+                                ),
+                                column(9,
+                                       uiOutput("expressionTitle"),
+                                       tableOutput("tableExpression"),
+                                       tableOutput("noGenes"),
+                                       tableOutput("noCells")
                                 )
-                         ),
-                         column(9,
-                                uiOutput("expressionTitle"),
-                                tableOutput("tableExpression"),
-                                tableOutput("noGenes"),
-                                tableOutput("noCells")
                          )
                        ),
 
@@ -160,7 +165,7 @@ shinyUI(fluidPage(
                                                                )
                                                              )
                                                     ),
-                                                    tabPanel("Heatmap",
+                                                    tabPanel("Mean & Variance",
                                                              tags$br(),
                                                              conditionalPanel(condition = "output.conditionDataEntry != 'TRUE'",
                                                                               h4('Please load the Expression and Cluster matrices on the "Upload Data" tab.')),
@@ -473,6 +478,5 @@ shinyUI(fluidPage(
                        )
               )
   )
-)
+))
 
-)

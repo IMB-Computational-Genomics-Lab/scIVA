@@ -48,11 +48,11 @@ shinyServer(function(input, output, session){
                                             sep = input$sepExpression,
                                             quote = input$quoteExpression)))
     } else {
-      dfExpression <- as.data.frame(fread(input$expression$datapath,
-                                          header = input$headerExpression,
-                                          sep = input$sepExpression,
-                                          quote = input$quoteExpression,
-                                          data.table = TRUE))
+      dfExpression <- fread(input$expression$datapath,
+                            header = input$headerExpression,
+                            sep = input$sepExpression,
+                            quote = input$quoteExpression,
+                            data.table = FALSE)
     }
 
 
@@ -505,7 +505,7 @@ shinyServer(function(input, output, session){
   output$heatmap <- renderPlotly({
 
     if (input$clusterOrderType == 'G') {
-      init <- Sys.time()
+      #init <- Sys.time()
       maExpression <- as.matrix(dataExpression())
       maDCN <- as.matrix(dataClusterNames())
       DE <- matrix(0,nrow(maExpression),nrow(maDCN))
@@ -515,7 +515,7 @@ shinyServer(function(input, output, session){
         DE[,i] <- rowMeans(maExpression[,dataCluster() == maDCN[i,1]])
       }
       DE <- as.data.frame(DE)
-      print(Sys.time() - init)
+      #print(Sys.time() - init)
 
     } else {
       DE <- dataExpression()
@@ -570,8 +570,14 @@ shinyServer(function(input, output, session){
   })
 
   output$tableMeanVar <- DT::renderDataTable({
+    dat <- dataGeneExpression()
+    tableMeanVar <- NULL
+    tableMeanVar$geneNames <- dat[,1]
+    tableMeanVar$geneMean <- apply(dat[,2:ncol(dat)],1,mean)
+    tableMeanVar$geneVar <- apply(dat[,2:ncol(dat)],1,var)
+    tableMeanVardf <- as.data.frame(tableMeanVar)
 
-    DT::datatable(dataGeneExpressionCluster(),options = list(pageLength = 20))
+    DT::datatable(tableMeanVardf,options = list(pageLength = 20))
   })
 
   libSizeExprsGenesFull <- reactive({
