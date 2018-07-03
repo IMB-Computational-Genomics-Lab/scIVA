@@ -44,12 +44,12 @@ shinyServer(function(input, output, session){
     req(input$expression)
     if(input$transposeExpression == TRUE){
       dfExpression <- as.data.frame(t(fread(input$expression$datapath,
-                                            header = input$headerExpression,
+                                            header = "auto",
                                             sep = input$sepExpression,
                                             quote = input$quoteExpression)))
     } else {
       dfExpression <- fread(input$expression$datapath,
-                            header = input$headerExpression,
+                            header = "auto",
                             sep = input$sepExpression,
                             quote = input$quoteExpression,
                             data.table = FALSE)
@@ -570,7 +570,7 @@ shinyServer(function(input, output, session){
   })
 
   output$tableMeanVar <- DT::renderDataTable({
-    dat <- dataGeneExpression()
+    dat <- dataExpression()
     tableMeanVar <- NULL
     tableMeanVar$geneNames <- dat[,1]
     tableMeanVar$geneMean <- apply(dat[,2:ncol(dat)],1,mean)
