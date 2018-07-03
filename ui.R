@@ -19,7 +19,10 @@ shinyUI(fluidPage(
     "#tableClusterDataPos tr.odd {background-color:black}
     #tableClusterDataPos tr.even {background-color:black}
     #tableClusterDataFull tr.odd {background-color:black}
-    #tableClusterDataFull tr.even {background-color:black}"
+    #tableClusterDataFull tr.even {background-color:black}
+    #tableMeanVar tr.odd {background-color:black}
+    #tableMeanVar tr.even {background-color:black}
+    "
   ))),
 
   titlePanel("scIVA: Single Cell Interactive Visualisation and Analysis"),
