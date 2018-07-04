@@ -572,7 +572,7 @@ shinyServer(function(input, output, session){
   output$tableMeanVar <- DT::renderDataTable({
     dat <- dataExpression()
     tableMeanVar <- NULL
-    tableMeanVar$geneNames <- dat[,1]
+    #tableMeanVar$geneNames <- dat[,1]
     tableMeanVar$geneMean <- apply(dat[,2:ncol(dat)],1,mean)
     tableMeanVar$geneVar <- apply(dat[,2:ncol(dat)],1,var)
     tableMeanVardf <- as.data.frame(tableMeanVar)
