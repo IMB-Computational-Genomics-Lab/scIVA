@@ -1,4 +1,138 @@
+library('shiny')
+library('plotly')
+library('RColorBrewer')
+library('sunburstR')
+library('readr')
+library('readxl')
+library('d3r')
+library('treemap')
+library('ggplot2')
+library('grid')
+library('randomcoloR')
+library('DT')
+library('shinythemes')
+library('webshot')
+library('data.table')
+library('heatmaply')
+library('ReactomePA')
+library('org.Hs.eg.db')
+library('clusterProfiler')
+library('networkD3')
+library('ggraph')
+library('igraph')
 
+
+summary_data_big <- function(stepCluster, dGE, threshold){
+  cellCount <- length(which(dGE$Cluster==stepCluster))
+  pos_idx <- which((dGE$Cluster==stepCluster) & (dGE$Gene>threshold))
+  posCount <- length(pos_idx)
+  posPercent <- posCount/cellCount*100
+  dGEC <- dGE$Gene[dGE$Cluster==stepCluster]
+  meanExprs <- mean(dGEC)
+  meanPositive <- mean(dGEC[dGEC>threshold])
+  return(list(cellCount,posCount,round(posPercent,3),round(meanExprs,3),round(meanPositive,3)))
+  cluster_exprs=NULL
+}
+
+summary_data_sunburst <- function(stepCluster, dGE, threshold){
+  cellCount <- length(which(dGE$Cluster==stepCluster))
+  pos_idx <- which((dGE$Cluster==stepCluster) & (dGE$Gene>threshold))
+  posCount <- length(pos_idx)
+  return(list(cellCount,posCount))
+}
+
+rep.row<-function(x,n) {
+  matrix(rep(x,each=n),nrow=n)
+}
+
+rep.col<-function(x,n) {
+  matrix(rep(x,each=n), ncol=n, byrow=TRUE)
+}
+
+thresholdCheck <- function(x){
+  if (x < 0) {
+    return(0)
+  } else {
+    return(x)
+  }
+}
+
+varMean <- function(x) {
+  if (mean(x) > 0) {
+    y <- var(x)/mean(x)
+  } else {
+    y<-0
+  }
+  return(y)
+}
+
+
+overlap_ratio <- function(x, y) {
+  x <- unlist(x)
+  y <- unlist(y)
+  length(intersect(x, y))/length(unique(c(x,y)))
+}
+
+update_n <- function(x, showCategory) {
+  if (!is.numeric(showCategory)) {
+    return(showCategory)
+  }
+
+  ## geneSets <- geneInCategory(x) ## use core gene for gsea result
+  n <- showCategory
+  if (nrow(x) < n) {
+    n <- nrow(x)
+  }
+
+  return(n)
+}
+
+
+emapplot.enrichResult <- function(x, showCategory = 30, color="p.adjust", layout = "kk", ...) {
+  n <- update_n(x, showCategory)
+  geneSets <- geneInCategory(x) ## use core gene for gsea result
+  y <- as.data.frame(x)
+  y <- y[1:n,]
+
+  if (n == 0) {
+    stop("no enriched term found...")
+  } else if (n == 1) {
+    g <- graph.empty(0, directed=FALSE)
+    g <- add_vertices(g, nv = 1)
+    V(g)$name <- y$Description
+    V(g)$color <- "red"
+    return(ggraph(g) + geom_node_point(color="red", size=5) + geom_node_text(aes_(label=~name)))
+  } else {
+    id <- y[,1]
+    geneSets <- geneSets[id]
+
+    n <- nrow(y) #
+    w <- matrix(NA, nrow=n, ncol=n)
+    colnames(w) <- rownames(w) <- y$Description
+
+    for (i in 1:n) {
+      for (j in i:n) {
+        w[i,j] = overlap_ratio(geneSets[id[i]], geneSets[id[j]])
+      }
+    }
+
+    wd <- melt(w)
+    wd <- wd[wd[,1] != wd[,2],]
+    wd <- wd[!is.na(wd[,3]),]
+    g <- graph.data.frame(wd[,-3], directed=FALSE)
+    E(g)$width=sqrt(wd[,3] * 5)
+    g <- delete.edges(g, E(g)[wd[,3] < 0.2])
+    idx <- unlist(sapply(V(g)$name, function(x) which(x == y$Description)))
+
+    cnt <- sapply(geneSets[idx], length)
+    V(g)$size <- cnt
+
+    colVar <- y[idx, color]
+    V(g)$color <- colVar
+  }
+
+  return(g)
+}
 server <- function(input, output, session){
 
   ####First Page inputs/outputs####
@@ -44,12 +178,12 @@ server <- function(input, output, session){
     req(input$expression)
     if(input$transposeExpression == TRUE){
       dfExpression <- as.data.frame(t(fread(input$expression$datapath,
-                                            header = input$headerExpression,
+                                            header = "auto",
                                             sep = input$sepExpression,
                                             quote = input$quoteExpression)))
     } else {
       dfExpression <- fread(input$expression$datapath,
-                            header = input$headerExpression,
+                            header = "auto",
                             sep = input$sepExpression,
                             quote = input$quoteExpression,
                             data.table = FALSE)
@@ -505,7 +639,7 @@ server <- function(input, output, session){
   output$heatmap <- renderPlotly({
 
     if (input$clusterOrderType == 'G') {
-      init <- Sys.time()
+      #init <- Sys.time()
       maExpression <- as.matrix(dataExpression())
       maDCN <- as.matrix(dataClusterNames())
       DE <- matrix(0,nrow(maExpression),nrow(maDCN))
@@ -515,7 +649,7 @@ server <- function(input, output, session){
         DE[,i] <- rowMeans(maExpression[,dataCluster() == maDCN[i,1]])
       }
       DE <- as.data.frame(DE)
-      print(Sys.time() - init)
+      #print(Sys.time() - init)
 
     } else {
       DE <- dataExpression()
@@ -569,6 +703,17 @@ server <- function(input, output, session){
     h
   })
 
+  output$tableMeanVar <- DT::renderDataTable({
+    dat <- dataExpression()
+    tableMeanVar <- NULL
+    #tableMeanVar$geneNames <- dat[,1]
+    tableMeanVar$geneMean <- apply(dat[,2:ncol(dat)],1,mean)
+    tableMeanVar$geneVar <- apply(dat[,2:ncol(dat)],1,var)
+    tableMeanVardf <- as.data.frame(tableMeanVar)
+
+    DT::datatable(tableMeanVardf,options = list(pageLength = 20))
+  })
+
   libSizeExprsGenesFull <- reactive({
     palette <- clusterPalette()
     expression.matrix <- as.data.frame(dataExpression())
@@ -596,7 +741,7 @@ server <- function(input, output, session){
   output$heatmap2 <- renderPlotly({
     DE <- dataExpressionGeneList()
     #totalReadsPerGenes <- rowSums(DE)
-    DE <-log2(DE+1)
+    DE <- log2(DE+1)
     k_row_input <-input$heatmap2Input
     if (input$Scaling == 'N') {
       p <- heatmaply(DE, k_row = k_row_input, labCol = NA, Colv = NULL) #, scale="row"
@@ -634,7 +779,7 @@ server <- function(input, output, session){
                         fontSize = 18, charge = -20, bounded = TRUE) #,linkColour = "FF530D"
     return(iD3)
     #return(list("iD3"=iD3))# "p_cnet" = p_cnet))
-    })
+  })
 
 
   output$cnet <- renderPlot({
@@ -987,6 +1132,8 @@ server <- function(input, output, session){
   #uiOutput("")
   ####
 
+  output$tableMeanVarTitle <- renderUI({HTML("<h4>Summary Table of Uploaded Expression Matrix</h4>")})
+
   output$expressionTitle <- renderUI({req(input$expression)
     HTML("<h4>Uploaded Expression Matrix</h4>")})
 
@@ -1008,10 +1155,10 @@ server <- function(input, output, session){
 
   output$summaryTitle <- renderUI({HTML("<h4>Summary Table: ", input$name, "</h4>")})
 
-  output$fullDataTitle <- renderUI({HTML("<h4>Full Data:<br>", input$name, "</h4>")})
+  output$fullDataTitle <- renderUI({HTML("<h5>Full Data:<br>", input$name, "</h4>")})
 
   output$posDataTitle <- renderUI({
     it <- thresholdCheck(input$threshold)
-    HTML("<h4>Positive Data, lower threshold at ", it,":<br>", input$name, "</h4>")})
+    HTML("<h5>Positive Data, lower threshold at ", it,":<br>", input$name, "</h4>")})
 
 }
