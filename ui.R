@@ -432,7 +432,9 @@ shinyUI(fluidPage(
                                                          ),
                                                          fluidRow(
                                                            column(12,
-                                                                  forceNetworkOutput("reactome")
+                                                                  wellPanel(
+                                                                    forceNetworkOutput("reactome")
+                                                                  )
 
                                                            )
                                                          ),

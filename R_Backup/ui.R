@@ -7,14 +7,14 @@ ui <- fluidPage(
          background-color: #ffffff;
          }
          ')
-    ),
+  ),
   tags$style(
     HTML('
          .tbody{
          color: #000000;
          }
          ')
-    ),
+  ),
   tags$tbody(tags$style(HTML(
     "#tableClusterDataPos tr.odd {background-color:black}
     #tableClusterDataPos tr.even {background-color:black}
@@ -432,7 +432,9 @@ ui <- fluidPage(
                                                          ),
                                                          fluidRow(
                                                            column(12,
-                                                                  forceNetworkOutput("reactome")
+                                                                  wellPanel(
+                                                                    forceNetworkOutput("reactome")
+                                                                  )
 
                                                            )
                                                          ),
@@ -481,4 +483,4 @@ ui <- fluidPage(
                        )
               )
   )
-  )
+)
