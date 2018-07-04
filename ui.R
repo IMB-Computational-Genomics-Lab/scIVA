@@ -440,7 +440,9 @@ shinyUI(fluidPage(
                                                          ),
                                                          fluidRow(
                                                            column(12,
-                                                                  plotOutput("cnet")
+                                                                  wellPanel(
+                                                                    plotOutput("cnet")
+                                                                  )
                                                            )
                                                          ),
                                                          tags$hr(),
