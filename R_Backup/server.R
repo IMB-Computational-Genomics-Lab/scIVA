@@ -133,6 +133,7 @@ emapplot.enrichResult <- function(x, showCategory = 30, color="p.adjust", layout
 
   return(g)
 }
+
 server <- function(input, output, session){
 
   ####First Page inputs/outputs####
@@ -1061,8 +1062,19 @@ server <- function(input, output, session){
     if(input$normOption == "CPM"){
       dat_norm <-apply(expression.matrix, 2, function(x){(x/sum(x))*1000000})
     }else if (input$normOption == "Quantile"){
-      #Need to cite quantile method in the preprocessCore package
-      dat_norm <-normalize.quantiles(as.matrix(expression.matrix))
+      #the function quantile_normalisation is based on DaveTang code
+      quantile_normalisation <- function(df){
+        df_rank <- apply(df,2,rank,ties.method="min")
+        df_sorted <- data.frame(apply(df, 2, sort))
+        df_mean <- apply(df_sorted, 1, mean)
+        index_to_mean <- function(ip_index, ip_mean){
+          return(ip_mean[ip_index])
+        }
+        df_final <- apply(df_rank, 2, index_to_mean, ip_mean=df_mean)
+        rownames(df_final) <- rownames(df)
+        return(df_final)
+      }
+      dat_norm <-quantile_normalisation(as.matrix(expression.matrix))
       dat_norm <-as.data.frame(dat_norm)
     }else if(input$normOption == "RLE"){
       #Need to cite RLE method in the ascend package
@@ -1119,11 +1131,9 @@ server <- function(input, output, session){
     p
   })
 
-
   output$libSizeExprsPostNorm <- renderPlotly(
     normalisedPlot()
   )
-
 
   ####Render Text####
 
