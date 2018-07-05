@@ -33,3 +33,61 @@ _scIVA_ provides summary statistics in data browsing table by cells and clusters
 _scIVA_ provides analysis tools for a user uploaded list of multiple genes. Features include reactome pathway analysis, with p-value cutoff for enrichment tests which displays interactive genetic pathways. The user can also choose to cluster by selected genes, with options to choose the number of clusters, and whether to scale by row, with results displayed as a heatmap with dendrogram to illustrate the arrangements of clustering.
 
 ## Running the web-tool
+The following packages must be installed
+```R
+install.packages('shiny')
+install.packages('plotly')
+install.packages('RColorBrewer')
+install.packages('sunburstR')
+install.packages('readr')
+install.packages('readxl')
+install.packages('d3r')
+install.packages('treemap')
+install.packages('ggplot2')
+install.packages('grid')
+install.packages('randomcoloR')
+install.packages('DT')
+install.packages('shinythemes')
+install.packages('webshot')
+install.packages('data.table')
+install.packages('heatmaply')
+source("https://bioconductor.org/biocLite.R")
+biocLite("ReactomePA")
+biocLite('org.Hs.eg.db')
+biocLite('clusterProfiler')
+install.packages('networkD3')
+install.packages('ggraph')
+install.packages('igraph')
+install.packages('ggbeeswarm')
+```
+Each packages needs to be loaded from the library
+```R
+library('shiny')
+library('plotly')
+library('RColorBrewer')
+library('sunburstR')
+library('readr')
+library('readxl')
+library('d3r')
+library('treemap')
+library('ggplot2')
+library('grid')
+library('randomcoloR')
+library('DT')
+library('shinythemes')
+library('webshot')
+library('data.table')
+library('heatmaply')
+library('ReactomePA')
+library('org.Hs.eg.db')
+library('clusterProfiler')
+library('networkD3')
+library('ggraph')
+library('igraph')
+library('ggbeeswarm')
+```
+
+Once the packages have been installed, the app can be ran with the following line.
+```R
+runGitHub("scIVA", "IMB-Computational-Genomics-Lab")
+```
