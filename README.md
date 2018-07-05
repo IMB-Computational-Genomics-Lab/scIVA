@@ -33,7 +33,7 @@ _scIVA_ provides summary statistics in data browsing table by cells and clusters
 _scIVA_ provides analysis tools for a user uploaded list of multiple genes. Features include reactome pathway analysis, with p-value cutoff for enrichment tests which displays interactive genetic pathways. The user can also choose to cluster by selected genes, with options to choose the number of clusters, and whether to scale by row, with results displayed as a heatmap with dendrogram to illustrate the arrangements of clustering.
 
 ## Running the web-tool
-The following packages must be installed
+The following packages must be installed.
 ```R
 install.packages('shiny')
 install.packages('plotly')
@@ -60,7 +60,7 @@ install.packages('ggraph')
 install.packages('igraph')
 install.packages('ggbeeswarm')
 ```
-Each packages needs to be loaded from the library
+Each package needs to be loaded from the library.
 ```R
 library('shiny')
 library('plotly')
@@ -91,3 +91,13 @@ Once the packages have been installed, the app can be ran with the following lin
 ```R
 runGitHub("scIVA", "IMB-Computational-Genomics-Lab")
 ```
+
+Sample data is provided in the 'Data' folder in the github.
+
+Upload 'Expression_sample_data.csv' as the Expression Matrix. Please ensure that Comma Separator is checked.
+
+Upload 'Cluster_sample_data.csv' as the Cluster Matrix. Please ensure that Comma Separator is checked.
+
+Upload 'GeneListSample.csv' as the gene list to subset the data by.
+
+Uplaod 'ClusterListSample.csv' as the cell list to subset the data by.
