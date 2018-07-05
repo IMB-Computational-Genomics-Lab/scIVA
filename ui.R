@@ -82,12 +82,12 @@ shinyUI(fluidPage(
                                                choices = c("Comma" = ",",
                                                            "Semicolon" = ";",
                                                            "Tab" = "\t"),
-                                               selected = ","),
+                                               selected = "\t"),
                                   radioButtons("quoteCluster", "Quote",
                                                choices = c("None" = "",
                                                            "Double Quote" = '"',
                                                            "Single Quote" = "'"),
-                                               selected = '"')
+                                               selected = "")
                                 )
                          ),
                          column(width = 4,
@@ -147,6 +147,9 @@ shinyUI(fluidPage(
                        conditionalPanel(condition = "output.conditionDataEntry != 'TRUE'",
                                         h4('Please load the Expression and Cluster matrices on the "Upload Data" tab.')),
                        conditionalPanel(condition = "output.conditionDataEntry == 'TRUE'",
+                                        conditionalPanel(condition = "output.checkNo != 'TRUE'",
+                                                         h4('Please check that "No. of Cells" is equal to "No. of Cells with Cluster Info." on the "Upload Data" tab.')),
+                                        # conditionalPanel(condition = "output.noClusters != output.noCells",
                                         tabsetPanel(type = "tabs",
                                                     tabPanel("Mapped Reads",
                                                              tags$br(),

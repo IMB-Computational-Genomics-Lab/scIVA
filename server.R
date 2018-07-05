@@ -203,6 +203,10 @@ shinyServer(function(input, output, session){
 
   ####TestCases####
 
+  output$checkNo <- reactive({
+    as.character(isTRUE(dim(dataCluster())[1] == dim(dataExpression())[2]))
+  })
+
   output$conditionDataEntry <- reactive({
     as.character(class(dataExpression()) == "data.frame" & class(dataClusterUpload()) == "data.frame")
   })
@@ -577,7 +581,7 @@ shinyServer(function(input, output, session){
     tableMeanVar$geneVar <- apply(dat[,2:ncol(dat)],1,var)
     tableMeanVardf <- as.data.frame(tableMeanVar)
 
-    DT::datatable(tableMeanVardf,options = list(pageLength = 20))
+    DT::datatable(tableMeanVardf[order(-tableMeanVardf$geneMean),],options = list(pageLength = 20))
   })
 
   libSizeExprsGenesFull <- reactive({
@@ -610,10 +614,16 @@ shinyServer(function(input, output, session){
     DE <- log2(DE+1)
     k_row_input <-input$heatmap2Input
     if (input$Scaling == 'N') {
-      p <- heatmaply(DE, k_row = k_row_input, labCol = NA, Colv = NULL) #, scale="row"
+      # p <- heatmaply(DE, k_row = k_row_input, labCol = NA, Colv = NULL) #, scale="row"
+      p <- heatmaply(DE, k_row = k_row_input, Colv = NULL, showticklabels = c(F,T),
+                     label_names = c('Gene','Cell','Exprs'),labRow = rownames(DE),labCol = colnames(DE),
+                     margins = c(0,250,0,0), colors = c('grey90','red'))#,scale = "row")
     } else {
       DE <- scale(DE, center = TRUE, scale = TRUE)
-      p <- heatmaply(DE, k_row = k_row_input, labCol = NA, Colv = NULL, scale="row")
+      #p <- heatmaply(DE, k_row = k_row_input, labCol = NA, Colv = NULL, scale="row")
+      p <- heatmaply(DE, k_row = k_row_input, Colv = NULL, showticklabels = c(F,T),
+                     label_names = c('Gene','Cell','Exprs'),labRow = rownames(DE),labCol = colnames(DE),
+                     margins = c(0,250,0,0), colors = c('grey90','red'))#,scale = "row")
     }
 
     plotHeight <- as.character(120+nrow(dataExpressionGeneList())*15)
@@ -664,6 +674,8 @@ shinyServer(function(input, output, session){
   outputOptions(output, "conditionDataEntry", suspendWhenHidden = FALSE)
   outputOptions(output, "conditionNameEntry", suspendWhenHidden = FALSE)
   outputOptions(output, "conditionListEntry", suspendWhenHidden = FALSE)
+  outputOptions(output, "checkNo", suspendWhenHidden = FALSE)
+
 
   ####LRT Tables####
   # function to run mcdavid et al. DE test
@@ -1007,7 +1019,7 @@ shinyServer(function(input, output, session){
   #uiOutput("")
   ####
 
-  output$tableMeanVarTitle <- renderUI({HTML("<h4>Summary Table of Uploaded Expression Matrix</h4>")})
+  output$tableMeanVarTitle <- renderUI({HTML("<h4>Mean Ordered Table of Uploaded Expression Matrix</h4>")})
 
   output$expressionTitle <- renderUI({req(input$expression)
     HTML("<h4>Uploaded Expression Matrix</h4>")})
