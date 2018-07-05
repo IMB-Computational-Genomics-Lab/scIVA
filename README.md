@@ -92,7 +92,11 @@ Once the packages have been installed, the app can be ran with the following lin
 runGitHub("scIVA", "IMB-Computational-Genomics-Lab")
 ```
 
+
 Sample data is provided in the 'Data' folder in the github repository.
+
+Sample data is provided in the 'Data' folder in the github.
+
 
 Upload 'Expression_sample_data.csv' as the Expression Matrix. Please ensure that Comma Separator is checked.
 
