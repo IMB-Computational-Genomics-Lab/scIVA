@@ -7,7 +7,7 @@ The _scIVA_ package can also be loaded and run on a local computer. In this case
 
 ## Overview
 <p align="center">
-	<img src="WorkFlow.png" width="200px"> </br>
+	<img src="WorkFlow.png" width="400px"> </br>
 	Figure 1. scIVA general workflow.
 </p>
 
