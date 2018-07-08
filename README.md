@@ -1,4 +1,9 @@
-# scIVA
+# scIVA - Single Cell Interactive Visualisation and Analysis 
+<p align="center">
+	<img src="scIVAHex.png" width="200px"> </br>
+
+</p>
+
 _scIVA_ is an interactive web-tool for visualisation and analysis of single cell RNA-Seq data.
 
 The _scIVA_ web-tool is freely available at: <http://computationalgenomics.com.au/shiny/scIVA/>. No local installation is required to run the web-tool. 
