@@ -1,7 +1,15 @@
 # scIVA
 _scIVA_ is an interactive web-tool for visualisation and analysis of single cell RNA-Seq data.
 
+The _scIVA_ web-tool is freely available at: <http://computationalgenomics.com.au/shiny/scIVA/>. No local installation is required to run the web-tool. 
+
+The _scIVA_ package can also be loaded and run on a local computer. In this case, several R packages are required to be installed to the local machine, as described below.  
+
 ## Overview
+<p align="center">
+	<img src="WorkFlow.png" width="200px"> </br>
+	Figure 1. scIVA general workflow.
+</p>
 
 #### Upload Data
 Users are required to upload:
@@ -104,4 +112,4 @@ Upload 'Cluster_sample_data.csv' as the Cluster Matrix. Please ensure that Comma
 
 Upload 'GeneListSample.csv' as the gene list to subset the data by.
 
-Uplaod 'ClusterListSample.csv' as the cell list to subset the data by.
+Upload 'ClusterListSample.csv' as the cell list to subset the data by.
