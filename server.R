@@ -810,7 +810,7 @@ shinyServer(function(input, output, session){
     cell.information <- dataCluster()[,1]
     batch.names <- unique(cell.information)
     ## Subset the data
-    total.counts <- colSums(expression.matrix)
+    total.counts <- log1p(colSums(expression.matrix))
     total.features <- apply(expression.matrix, 2, function(x){sum(x>0)})
     ## Tidy dataframe
     combined.data <- list(TotalCounts = total.counts, FeatureCounts = total.features, BatchInfo = cell.information)
@@ -821,7 +821,7 @@ shinyServer(function(input, output, session){
     control.plot <- ggplot2::ggplot(combined.df, ggplot2::aes(x = factor(BatchInfo), y = TotalCounts, colour = FeatureCounts))
     # control.plot <- control.plot + ggplot2::geom_violin(size = 1, scale = "width", colour = NA)
     control.plot <- control.plot + ggbeeswarm::geom_quasirandom(shape = 16, size=5, alpha=0.5, dodge.width=0.5, groupOnX = T)
-    control.plot <- control.plot + gradient.ramp + ggplot2::scale_x_discrete(limits = batch.names) + ggplot2::xlab("Sample") + ggplot2::ylab("Total mapped reads per cell")
+    control.plot <- control.plot + gradient.ramp + ggplot2::scale_x_discrete(limits = batch.names) + ggplot2::xlab("Sample") + ggplot2::ylab("Total mapped reads per cell (log)")
     control.plot <- control.plot + ggplot2::ggtitle("Total mapped reads and genes per sample")
     m <- list(l = 80, b = 40, t = 95)
     p <- ggplotly(control.plot)  %>% layout(margin = m)
@@ -1019,7 +1019,7 @@ shinyServer(function(input, output, session){
   #uiOutput("")
   ####
 
-  output$tableMeanVarTitle <- renderUI({HTML("<h4>Mean Ordered Table of Uploaded Expression Matrix</h4>")})
+  output$tableMeanVarTitle <- renderUI({HTML("<h4>Ordered Table of Uploaded Expression Matrix</h4>")})
 
   output$expressionTitle <- renderUI({req(input$expression)
     HTML("<h4>Uploaded Expression Matrix</h4>")})
