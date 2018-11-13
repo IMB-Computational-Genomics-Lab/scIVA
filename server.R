@@ -666,7 +666,7 @@ shinyServer(function(input, output, session){
     #totalReadsPerGenes <- rowSums(DE)
     p_cutoff <-input$p_cutoff
     x <- enrichPathway(gene=converted_genes,pvalueCutoff= p_cutoff, readable=TRUE)
-    p <- cnetplot(x, showCategory=20, categorySize="pvalue", layout="nicely")
+    p <- cnetplot(x, showCategory=20, colorEdge=TRUE, categorySize="pvalue", layout="nicely")
     #return(list("iD3"=iD3))# "p_cnet" = p_cnet))
     p
   })
